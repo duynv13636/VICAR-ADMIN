@@ -23,7 +23,6 @@ function App() {
   return (
     <>
     <QueryClientProvider client={queryClient}>
-        {/* <RootRouter /> */}
         <RouterProvider router={RootRouter} />
       </QueryClientProvider>
     </>
