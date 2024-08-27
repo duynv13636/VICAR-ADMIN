@@ -1,18 +1,18 @@
 import ButtonCommon from '@src/Common/ButtonCommon/ButtonCommon';
 import InputCommon from '@src/Common/InputCommon/InputCommon';
-import { AddProductService } from '@src/Services/ProductService';
 import { IProductAdd } from '@src/Types/ProductsType';
 import { Form, FormProps, Select } from 'antd';
 const { Option } = Select;
 type IProps = {
   setIsOpen: (open: boolean) => void;
+  onSubmit: (data: IProductAdd) => void;
 };
-const AddProduct = ({ setIsOpen }: IProps) => {
+const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
   const [form] = Form.useForm();
-  const addProductMutation = AddProductService();
+
   const onFinish: FormProps<IProductAdd>['onFinish'] = (values) => {
     console.log('Success:', values);
-    addProductMutation.mutate(values);
+    onSubmit(values);
   };
   return (
     <div>

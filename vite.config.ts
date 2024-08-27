@@ -15,6 +15,6 @@ export default defineConfig({
     }
   },
   resolve: {
-    alias: [{ find: '@src', replacement: path.resolve(path.dirname(''), 'src') }]
+    alias: [{ find: '@src', replacement: path.resolve(__dirname, 'src') }]
   }
 });
