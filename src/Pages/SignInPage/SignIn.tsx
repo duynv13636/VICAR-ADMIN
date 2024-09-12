@@ -1,36 +1,34 @@
 import ButtonCommon from '@src/Common/ButtonCommon/ButtonCommon';
-import InputCommon from '@src/Common/InputCommon/InputCommon';
+import { LoginService } from '@src/Services/UserService';
 import { Form, FormProps, Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
   type FieldType = {
-    username?: string;
-    password?: string;
-    remember?: string;
+    email: string;
+    password: string;
   };
-
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const signUpMutation = LoginService((data) => {
+    localStorage.setItem("token", data.data?.access_token || "");
+    navigate('/');
+  });
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
+    form.validateFields();
+    signUpMutation.mutate({ data: values });
   };
   return (
-    <div>
-      {' '}
-      <div>
-        <Form
-          name='basic'
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          autoComplete='off'
-        >
+    <div className=''>
+      <h1 className='text-center pt-60 pb-20'>Login</h1>
+      <div className='flex justify-center items-center'>
+        <Form name='basic' style={{ width: '30%' }} onFinish={onFinish} className='' layout='vertical' form={form}>
           <Form.Item<FieldType>
-            label='Username'
-            name='username'
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            label='Email'
+            name='email'
+            rules={[{ required: true, message: 'Please input your Email!' }]}
           >
-            <InputCommon placeholder='' />
+            <Input placeholder='Email' className='' />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -38,11 +36,18 @@ const SignIn = () => {
             name='password'
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password />
+            <Input.Password placeholder='Password' />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <ButtonCommon onClickBtn={() => {}} textButton='Submit' />
+          <Form.Item className='w-full'>
+            <ButtonCommon
+              onClickBtn={() => {
+                form.validateFields();
+                form.submit();
+              }}
+              textButton='Sign up'
+              classNameProps='w-full bg-blue-500 justify-center'
+            />
           </Form.Item>
         </Form>
       </div>
