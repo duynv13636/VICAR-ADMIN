@@ -26,7 +26,8 @@ export const handleLogout = () => {
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const accessToken = "";
+    const accessToken = localStorage.getItem("token");
+    console.log("🚀 ~ accessToken:", accessToken)
     if (
       !config.url?.includes("authenticate") &&
       !config.url?.includes("account")
@@ -75,7 +76,7 @@ axiosInstance.interceptors.response.use(
 
     // Use accessToken from global state if originalRequest.headers.Authorization is undefined
     if (!originalRequest.headers.Authorization) {
-      const accessToken = "";
+      const accessToken = localStorage.getItem("token") || "";
 
       if (accessToken) {
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
