@@ -14,9 +14,10 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const uploadImage = UploadImageService();
+  const uploadImage = UploadImageService(() => {
+    setLoading(false);
+  });
   const onFinish: FormProps<IProductAdd>['onFinish'] = (values) => {
-    console.log('Success:', values);
     onSubmit(values);
   };
   const beforeUpload = (file: FileType) => {
@@ -31,21 +32,13 @@ const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
     return isJpgOrPng && isLt2M;
   };
   const handleChange: UploadProps['onChange'] = (info) => {
-    console.log('🚀 ~ AddProduct ~ info:', info);
     if (info.file.status === 'uploading') {
-      setLoading(true);
       return;
     }
-    if (info.file.status === 'done') {
-      const fileData = info.file.originFileObj;
-      console.log("🚀 ~ AddProduct ~ fileData:", fileData)
-      uploadImage.mutate({ file: fileData });
-      // Get this url from response in real world.
-      // getBase64(info.file.originFileObj as FileType, (url) => {
-      //   setLoading(false);
-      //   setImageUrl(url);
-      // });
-    }
+    setLoading(true);
+    const data = new FormData();
+    data.append('file', info.file.originFileObj as any);
+    uploadImage.mutate({ file: data });
   };
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type='button' className='outline-none border-none'>
@@ -88,7 +81,6 @@ const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
             listType='picture-card'
             className='avatar-uploader'
             showUploadList={false}
-            action='https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload'
             beforeUpload={beforeUpload}
             onChange={handleChange}
           >

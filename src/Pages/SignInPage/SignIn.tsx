@@ -1,4 +1,5 @@
 import ButtonCommon from '@src/Common/ButtonCommon/ButtonCommon';
+import useLocalStorage from '@src/Hooks/useLocalStorage';
 import { LoginService } from '@src/Services/UserService';
 import { Form, FormProps, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +11,10 @@ const SignIn = () => {
   };
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const { setValue } = useLocalStorage('token', '');
   const signUpMutation = LoginService((data) => {
-    localStorage.setItem("token", data.data?.access_token || "");
-    navigate('/');
+    setValue(data.data?.access_token || '');
+    navigate('/product-management');
   });
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     form.validateFields();
@@ -45,7 +47,7 @@ const SignIn = () => {
                 form.validateFields();
                 form.submit();
               }}
-              textButton='Sign up'
+              textButton='Login'
               classNameProps='w-full bg-blue-500 justify-center'
             />
           </Form.Item>

@@ -9,7 +9,7 @@ const RootRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path='/' element={<RootLayout />}>
-        <Route index element={<ProductPage />} />
+        <Route index path='product-management' element={<ProductPage />} />
       </Route>
       <Route path='signin' element={<SignIn />} />
       <Route path='signup' element={<SignUp />} />
