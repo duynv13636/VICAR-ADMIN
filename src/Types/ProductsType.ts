@@ -6,6 +6,8 @@ export interface IProductAdd {
   category: number;
   description: string;
   category_id?: number;
+  id?: string;
+  full_description: string;
 }
 export interface IGetProductList {
   quantity: string;

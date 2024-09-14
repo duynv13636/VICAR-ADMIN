@@ -1,24 +1,32 @@
 import ButtonCommon from '@src/Common/ButtonCommon/ButtonCommon';
 import InputCommon from '@src/Common/InputCommon/InputCommon';
 import { UploadImageService } from '@src/Services/UploadService';
-import { IProductAdd } from '@src/Types/ProductsType';
+import { IGetProductList, IProductAdd } from '@src/Types/ProductsType';
 import { Form, FormProps, GetProp, message, Select, Spin, Upload, UploadProps } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 const { Option } = Select;
 type IProps = {
   setIsOpen: (open: boolean) => void;
   onSubmit: (data: IProductAdd) => void;
+  onEdit: (data: IProductAdd) => void;
+  isEditProduct: IGetProductList | undefined;
 };
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
+const AddProduct = ({ setIsOpen, onSubmit, onEdit, isEditProduct }: IProps) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const uploadImage = UploadImageService(() => {
+  const [imagePreview, setImagePreview] = useState('');
+  const uploadImage = UploadImageService((res) => {
+    setImagePreview(res.data.url || '');
     setLoading(false);
   });
   const onFinish: FormProps<IProductAdd>['onFinish'] = (values) => {
-    onSubmit(values);
+    if (!isEditProduct?.id) {
+      onSubmit(values);
+    } else {
+      onEdit({ ...values, id: isEditProduct?.id });
+    }
   };
   const beforeUpload = (file: FileType) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -37,7 +45,7 @@ const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
     }
     setLoading(true);
     const data = new FormData();
-    data.append('file', info.file.originFileObj as any);
+    data.append('images', info.file.originFileObj as any);
     uploadImage.mutate({ file: data });
   };
   const uploadButton = (
@@ -46,6 +54,12 @@ const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
+  useEffect(() => {
+    form.setFieldsValue({
+      name: isEditProduct?.name || '',
+      price: isEditProduct?.price || null
+    });
+  }, [isEditProduct]);
   return (
     <div>
       <Form form={form} onFinish={onFinish} layout='vertical'>
@@ -75,18 +89,25 @@ const AddProduct = ({ setIsOpen, onSubmit }: IProps) => {
             <Option value='other'>other</Option>
           </Select>
         </Form.Item>
+        <Form.Item<IProductAdd>
+          label='Description'
+          name='full_description'
+          rules={[{ required: true, message: 'Please input your price!' }]}
+        >
+          <InputCommon placeholder='Price product' />
+        </Form.Item>
         <div>
           <Upload
-            name='file'
+            name='images'
             listType='picture-card'
             className='avatar-uploader'
             showUploadList={false}
             beforeUpload={beforeUpload}
             onChange={handleChange}
           >
-            {/* {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton} */}
             {uploadButton}
           </Upload>
+          <img src={imagePreview} alt='' />
         </div>
         <div className='flex justify-end'>
           <ButtonCommon classNameProps='bg-gray-400' onClickBtn={() => setIsOpen(false)} textButton='Cancel' />

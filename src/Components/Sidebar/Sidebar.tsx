@@ -17,7 +17,7 @@ const Sidebar = () => {
                 <li>
                   <Link
                     className='group text-base flex items-center gap-2.5 rounded-sm py-2 font-medium text-gray-200'
-                    to='/'
+                    to='/product-management'
                   >
                     <FaListUl />
                     Management Products
@@ -25,7 +25,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link
-                    to='/categories'
+                    to='/category-management'
                     className='group text-base flex items-center gap-2.5 rounded-sm py-2 font-medium text-gray-200'
                   >
                     <FaRegListAlt />
