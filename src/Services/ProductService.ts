@@ -12,10 +12,38 @@ export const AddProductService = (callback: () => void) =>
       console.log('🚀 ~ onError ~ error:', error);
     },
     onSuccess() {
-      message.success("Add product success.")
+      message.success('Add product success.');
       callback();
     }
   });
+export const EditProductService = (callback: () => void) =>
+  useMutation({
+    mutationFn: (data: IProductAdd) => {
+      const dataPayload = { ...data };
+      delete dataPayload.id;
+      return axiosInstance.put(`/product/${data.id}`, dataPayload);
+    },
+    onError(error) {
+      console.log('🚀 ~ onError ~ error:', error);
+    },
+    onSuccess() {
+      message.success('Edit product success.');
+      callback();
+    }
+  });
+  export const DeleteProductService = (callback: () => void) =>
+    useMutation({
+      mutationFn: (idProduct: string) => {
+        return axiosInstance.delete(`/product/${idProduct}`);
+      },
+      onError(error) {
+        console.log('🚀 ~ onError ~ error:', error);
+      },
+      onSuccess() {
+        message.success('Delete product success.');
+        callback();
+      }
+    });
 export const GetProductService = () =>
   useQuery({
     queryKey: ['GetProductService'],
@@ -26,5 +54,5 @@ export const GetProductService = () =>
     throwOnError(error) {
       console.log('🚀 ~ throwOnError ~ error:', error);
       return false;
-    },
+    }
   });

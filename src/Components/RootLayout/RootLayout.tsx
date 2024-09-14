@@ -10,6 +10,9 @@ const RootLayout = () => {
   useEffect(() => {
     if (!storedValue) {
       navigate('/signin');
+    } else {
+      navigate('/product-management');
+
     }
   }, [storedValue]);
   return (
