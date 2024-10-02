@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-const useLocalStorage = (key: string, initialValue: any) => {
+const useLocalStorage = (key: string, initialValue: unknown) => {
   // Lấy giá trị từ localStorage hoặc dùng giá trị mặc định
-  const [storedValue, setStoredValue] = useState<any>(() => {
+  const [storedValue, setStoredValue] = useState<unknown>(() => {
     try {
-      const item = localStorage.getItem(key);
+      const item = localStorage.getItem(key) || "";
+      console.log("🚀 ~ useLocalStorage ~ item:", item)
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       console.error(error);
@@ -13,7 +14,7 @@ const useLocalStorage = (key: string, initialValue: any) => {
   });
 
   // Hàm để lưu giá trị vào localStorage
-  const setValue = (value: any | ((val: any) => any)) => {
+  const setValue = (value: unknown | ((val: unknown) => unknown)) => {
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);

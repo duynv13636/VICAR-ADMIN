@@ -1,5 +1,5 @@
-{
-  "extends": [
+module.exports = {
+  extends: [
     "react-app",
     "prettier"
   ],
@@ -7,7 +7,8 @@
     "react",
     "prettier"
   ],
-  "rules": {
+  rules: {
+    "@typescript-eslint/no-explicit-any": "off",
     "prettier/prettier": [
       "warn",
       {
@@ -22,6 +23,6 @@
         "jsxSingleQuote": true
       }
     ],
-    "@typescript-eslint/no-explicit-any": "off"
   }
+
 }
