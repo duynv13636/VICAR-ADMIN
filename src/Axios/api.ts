@@ -25,12 +25,12 @@ export const handleLogout = () => {
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('token');
-    const token = JSON.parse(accessToken || '');
+    const accessToken = localStorage.getItem('token') || '';
+    const token = accessToken ? JSON.parse(accessToken || '') : '';
     console.log('🚀 ~ accessToken:', accessToken);
-    if (!config.url?.includes('authenticate') && !config.url?.includes('account')) {
-      config.url = '/api' + config.url;
-    }
+    // if (!config.url?.includes('authenticate') && !config.url?.includes('account')) {
+    //   config.url = '/api' + config.url;
+    // }
     if (accessToken) {
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
       config.headers.Authorization = `Bearer ${token}`;
@@ -38,7 +38,10 @@ axiosInstance.interceptors.request.use(
       delete axiosInstance.defaults.headers.common.Authorization;
       delete config.headers.Authorization;
     }
-
+    if (!window.location.pathname.includes('signin')) {
+      config.headers['ecommerce_id'] = 1;
+    }
+    config.url = '/api' + config.url;
     return config;
   },
   (requestError) => {
@@ -68,7 +71,7 @@ axiosInstance.interceptors.response.use(
     // Use accessToken from global state if originalRequest.headers.Authorization is undefined
     if (!originalRequest.headers.Authorization) {
       const accessToken = localStorage.getItem('token') || '';
-      const token = JSON.parse(accessToken || '');
+      const token = accessToken ? JSON.parse(accessToken || '') : '';
 
       if (accessToken) {
         originalRequest.headers.Authorization = `Bearer ${token}`;

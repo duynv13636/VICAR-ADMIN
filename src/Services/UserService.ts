@@ -6,7 +6,7 @@ import { message } from 'antd';
 export const SignUpService = (callBack: () => void) =>
   useMutation({
     mutationFn: ({ data }: { data: IUserPost }) => {
-      return axiosInstance.post('/users/login', data);
+      return axiosInstance.post('/users/register', data);
     },
     onError(error) {
       console.log(error);

@@ -7,7 +7,7 @@ const SignUp = () => {
   type FieldType = {
     email: string;
     password: string;
-    userName: string;
+    full_name: string;
   };
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -16,11 +16,11 @@ const SignUp = () => {
   });
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     form.validateFields();
-    signUpMutation.mutate({ data: { ...values, full_name: values.userName, role: 'admin' } });
+    signUpMutation.mutate({ data: { ...values, role: 'admin' } });
   };
   return (
     <div className=''>
-      <h1 className='text-center pt-60 pb-20'>Sign Up</h1>
+      <h1 className='text-center pt-60 pb-20 text-black'>Sign Up</h1>
       <div className='flex justify-center items-center'>
         <Form name='basic' style={{ width: '30%' }} onFinish={onFinish} className='' layout='vertical' form={form}>
           <Form.Item<FieldType>
@@ -32,7 +32,7 @@ const SignUp = () => {
           </Form.Item>
           <Form.Item<FieldType>
             label='Full name'
-            name='userName'
+            name='full_name'
             rules={[{ required: true, message: 'Please input your full name!' }]}
           >
             <Input placeholder='Email' className='' />

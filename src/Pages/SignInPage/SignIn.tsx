@@ -22,7 +22,7 @@ const SignIn = () => {
   };
   return (
     <div className=''>
-      <h1 className='text-center pt-60 pb-20'>Login</h1>
+      <h1 className='text-center pt-60 pb-20 text-black'>Login</h1>
       <div className='flex justify-center items-center'>
         <Form name='basic' style={{ width: '30%' }} onFinish={onFinish} className='' layout='vertical' form={form}>
           <Form.Item<FieldType>

@@ -7,13 +7,14 @@ import useLocalStorage from '@src/Hooks/useLocalStorage';
 const RootLayout = () => {
   const {storedValue} = useLocalStorage('token', '');
   const navigate = useNavigate();
+  console.log("🚀 ~ RootLayout ~ navigate:", navigate)
   useEffect(() => {
-    if (!storedValue) {
-      navigate('/signin');
-    } else {
-      navigate('/product-management');
+    // if (!storedValue) {
+    //   navigate('/signin');
+    // } else {
+    //   navigate('/product-management');
 
-    }
+    // }
   }, [storedValue]);
   return (
     <div>
