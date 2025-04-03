@@ -1,7 +1,7 @@
 type IProps = {
   textButton: string;
   icon?: React.ReactNode;
-  onClickBtn: () => void;
+  onClickBtn?: () => void;
   classNameProps?: string;
 };
 const ButtonCommon = ({ icon, textButton, onClickBtn, classNameProps }: IProps) => {

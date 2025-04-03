@@ -3,23 +3,23 @@ import { IGetProductList } from '@src/Types/ProductsType';
 import { Spin } from 'antd';
 import { memo } from 'react';
 import { MdDelete, MdModeEdit, MdOutlineAddCircleOutline } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 type IProps = {
-  setOpenModalAddProduct: (boolean: boolean) => void;
   isLoading: boolean;
   dataProducts: IGetProductList[];
-  setEditProduct: (data: IGetProductList) => void;
   onDeleteProduct: (idProduct: string) => void;
 };
-const ProductList = ({ setOpenModalAddProduct, isLoading, dataProducts, setEditProduct, onDeleteProduct }: IProps) => {
+const ProductList = ({ isLoading, dataProducts, onDeleteProduct }: IProps) => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className='flex justify-between'>
-        <h1 className='text-2xl font-semibold'>Management Product</h1>
+        <h1 className='text-2xl font-semibold text-black'>Quản lý sản phẩm</h1>
         <ButtonCommon
           classNameProps=''
-          onClickBtn={() => setOpenModalAddProduct(true)}
-          textButton='Add Product'
+          textButton='Thêm sản phẩm'
           icon={<MdOutlineAddCircleOutline />}
+          onClickBtn={()=> {navigate("/add-product")}}
         ></ButtonCommon>
       </div>
       <Spin spinning={isLoading}>
@@ -49,7 +49,7 @@ const ProductList = ({ setOpenModalAddProduct, isLoading, dataProducts, setEditP
                 </tr>
               </thead>
               <tbody>
-                {dataProducts?.length &&
+                {dataProducts?.length ?
                   dataProducts?.map((product) => (
                     <tr key={product._id} className='bg-white border-b'>
                       <th className='px-6 py-4'>
@@ -65,10 +65,6 @@ const ProductList = ({ setOpenModalAddProduct, isLoading, dataProducts, setEditP
                         <div className='flex gap-2'>
                           <MdModeEdit
                             className='cursor-pointer'
-                            onClick={() => {
-                              setOpenModalAddProduct(true);
-                              setEditProduct(product);
-                            }}
                           />
                           <MdDelete
                             className='cursor-pointer text-red-400'
@@ -79,7 +75,7 @@ const ProductList = ({ setOpenModalAddProduct, isLoading, dataProducts, setEditP
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )): <td colSpan={6} className='text-center'>Không có sản phẩm</td>}
               </tbody>
             </table>
           </div>

@@ -1,19 +1,14 @@
 import ButtonCommon from '@src/Common/ButtonCommon/ButtonCommon';
 import InputCommon from '@src/Common/InputCommon/InputCommon';
 import { UploadImageService } from '@src/Services/UploadService';
-import { IGetProductList, IProductAdd } from '@src/Types/ProductsType';
+import { IProductAdd } from '@src/Types/ProductsType';
 import { Form, FormProps, GetProp, message, Select, Spin, Upload, UploadProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 const { Option } = Select;
-type IProps = {
-  setIsOpen: (open: boolean) => void;
-  onSubmit: (data: IProductAdd) => void;
-  onEdit: (data: IProductAdd) => void;
-  isEditProduct: IGetProductList | undefined;
-};
+
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-const AddProduct = ({ setIsOpen, onSubmit, onEdit, isEditProduct }: IProps) => {
+const AddProduct = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
@@ -22,11 +17,12 @@ const AddProduct = ({ setIsOpen, onSubmit, onEdit, isEditProduct }: IProps) => {
     setLoading(false);
   });
   const onFinish: FormProps<IProductAdd>['onFinish'] = (values) => {
-    if (!isEditProduct?.id) {
-      onSubmit(values);
-    } else {
-      onEdit({ ...values, id: isEditProduct?.id });
-    }
+    console.log("🚀 ~ AddProduct ~ values:", values)
+    // if (!isEditProduct?.id) {
+    //   onSubmit(values);
+    // } else {
+    //   onEdit({ ...values, id: isEditProduct?.id });
+    // }
   };
   const beforeUpload = (file: FileType) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -54,12 +50,12 @@ const AddProduct = ({ setIsOpen, onSubmit, onEdit, isEditProduct }: IProps) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
-  useEffect(() => {
-    form.setFieldsValue({
-      name: isEditProduct?.name || '',
-      price: isEditProduct?.price || null
-    });
-  }, [isEditProduct]);
+  // useEffect(() => {
+  //   form.setFieldsValue({
+  //     name: isEditProduct?.name || '',
+  //     price: isEditProduct?.price || null
+  //   });
+  // }, [form, isEditProduct]);
   return (
     <div>
       <Form form={form} onFinish={onFinish} layout='vertical'>
@@ -110,7 +106,7 @@ const AddProduct = ({ setIsOpen, onSubmit, onEdit, isEditProduct }: IProps) => {
           <img src={imagePreview} alt='' />
         </div>
         <div className='flex justify-end'>
-          <ButtonCommon classNameProps='bg-gray-400' onClickBtn={() => setIsOpen(false)} textButton='Cancel' />
+          <ButtonCommon classNameProps='bg-gray-400' textButton='Cancel' />
           <ButtonCommon onClickBtn={form.submit} textButton='Submit' />
         </div>
       </Form>

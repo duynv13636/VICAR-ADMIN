@@ -8,6 +8,7 @@ const UNAUTHORIZED_STATUS = 401;
 export const USER_ROLE = 4;
 
 export const axiosInstance = Axios.create({
+  baseURL:  import.meta.env.API_URL||'http://localhost:3000',
   timeout: 3 * 60 * 1000
 });
 export const handleLogout = () => {
@@ -25,6 +26,7 @@ export const handleLogout = () => {
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    axiosInstance.defaults.headers.common.ecommerce_id = 2;
     const accessToken = localStorage.getItem('token') || '';
     const token = accessToken ? JSON.parse(accessToken || '') : '';
     console.log('🚀 ~ accessToken:', accessToken);
@@ -38,9 +40,9 @@ axiosInstance.interceptors.request.use(
       delete axiosInstance.defaults.headers.common.Authorization;
       delete config.headers.Authorization;
     }
-    if (!window.location.pathname.includes('signin')) {
-      config.headers['ecommerce_id'] = 1;
-    }
+    // if (!window.location.pathname.includes('signin')) {
+    //   config.headers['ecommerce_id'] = 1;
+    // }
     config.url = '/api' + config.url;
     return config;
   },
