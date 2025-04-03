@@ -2,6 +2,7 @@
 import RootLayout from '@src/Components/RootLayout/RootLayout';
 import CategoryPage from '@src/Pages/CategoryPage';
 import ProductPage from '@src/Pages/ProductPage';
+import AddProduct from '@src/Pages/ProductPage/AddProduct/AddProduct';
 import SignIn from '@src/Pages/SignInPage/SignIn';
 import SignUp from '@src/Pages/SignUpPage/SignUp';
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
@@ -12,6 +13,7 @@ const RootRouter = createBrowserRouter(
       <Route path='/' element={<RootLayout />}>
         <Route index path='product-management' element={<ProductPage />} />
         <Route path='category-management' element={<CategoryPage />} />
+        <Route path='add-product' element={<AddProduct />} />
       </Route>
       <Route path='signin' element={<SignIn />} />
       <Route path='signup' element={<SignUp />} />
